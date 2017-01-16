@@ -1,5 +1,5 @@
 var fs = require("fs");
-var file = "watchnus.db";
+var file = "nuswatch.db";
 var exists = fs.existsSync(file);
 
 console.log(exists);
@@ -20,19 +20,20 @@ db.serialize(function() {
 		db.run("CREATE TABLE MacLocation (macAddress TEXT, latitude TEXT, longitude TEXT, building TEXT, floor TEXT)");		
 }
 
-var stmt = db.prepare("INSERT INTO BusNameList VALUES (?,?)");
+//var stmt = db.prepare("INSERT INTO BusNameList VALUES (?,?)");
 
-for(var i = 0; i<10; i++){
-  	//rnd = Math.floor(Math.random() * 10000000);
-  	stmt.run("nodeId no. " + (i+1), "vehicleSerial no. " + (i+1));
-  }
+// for(var i = 0; i<10; i++){
+//   	//rnd = Math.floor(Math.random() * 10000000);
+//   	stmt.run("nodeId no. " + (i+1), "vehicleSerial no. " + (i+1));
+//   }
 
-  stmt.finalize();
+//stmt.finalize();
 
- /* db.each("Select rowid AS id, item FROM BusNameList", function(err, row){
-  	console.log(row.id + ": " + row.item);
-  });*/
+ db.each("Select rowid AS id, nodeId, gpsTime, latitude, longitude, heading FROM BusInformation", function(err, row){
+  	console.log(row.id + ": " + row.nodeId + " " + row.gpsTime + " " + row.latitude + " " + row.longitude + " " + row.heading);
+  });
 
 });
+
 
 db.close();
