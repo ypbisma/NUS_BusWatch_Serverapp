@@ -14,23 +14,22 @@ var db = new sqlite3.Database(file);
 
 db.serialize(function() {
 	if(!exists){
-		db.run("CREATE TABLE BusNameList (nodeId TEXT, vehicleSerial TEXT) ");
-		db.run("CREATE TABLE BusInformation (nodeId TEXT, gpsTime TEXT, latitude TEXT, longitude TEXT, heading TEXT)");
-		db.run("CREATE TABLE MacAddress (macAddress TEXT)");
-		db.run("CREATE TABLE MacLocation (macAddress TEXT, latitude TEXT, longitude TEXT, building TEXT, floor TEXT)");		
+		db.run("CREATE TABLE LastBusInformation (nodeId TEXT, vehicleSerial TEXT, gpsTime TEXT, latitude TEXT, longitude TEXT, heading TEXT) ");
+		db.run("CREATE TABLE BusInformation (nodeId TEXT, vehicleSerial TEXT, gpsTime TEXT, latitude TEXT, longitude TEXT, heading TEXT)");
+		db.run("CREATE TABLE LastMacLocation (macAddress TEXT, latitude TEXT, longitude TEXT, floor TEXT)");
+		db.run("CREATE TABLE MacLocation (macAddress TEXT, latitude TEXT, longitude TEXT, floor TEXT)");		
 }
 
-//var stmt = db.prepare("INSERT INTO BusNameList VALUES (?,?)");
+ db.each("Select rowid AS id, nodeId, vehicleSerial, gpsTime, latitude, longitude, heading FROM LastBusInformation", function(err, row){
+  	console.log(row.id + ": " + row.nodeId + " " + row.vehicleSerial + " " + row.gpsTime + " " + row.latitude + " " + row.longitude + " " + row.heading);
+  });
 
-// for(var i = 0; i<10; i++){
-//   	//rnd = Math.floor(Math.random() * 10000000);
-//   	stmt.run("nodeId no. " + (i+1), "vehicleSerial no. " + (i+1));
-//   }
+ // db.each("Select rowid AS id, nodeId, vehicleSerial, gpsTime, latitude, longitude, heading FROM BusInformation", function(err, row){
+ //  	console.log(row.id + ": " + row.nodeId + " " + row.vehicleSerial + " " + row.gpsTime + " " + row.latitude + " " + row.longitude + " " + row.heading);
+ //  });
 
-//stmt.finalize();
-
- db.each("Select rowid AS id, nodeId, gpsTime, latitude, longitude, heading FROM BusInformation", function(err, row){
-  	console.log(row.id + ": " + row.nodeId + " " + row.gpsTime + " " + row.latitude + " " + row.longitude + " " + row.heading);
+ db.each("Select rowid AS id, macAddress, latitude, longitude, floor FROM LastMacLocation", function(err, row){
+  	console.log(row.id + ": " + row.macAddress + " " + row.latitude + " " + row.longitude + " " + row.floor);
   });
 
 });
