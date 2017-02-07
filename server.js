@@ -30,7 +30,7 @@ router.get('/bus', function(req, res) {
 		var busList = [];
 		db.all("Select rowid AS id, nodeId, gpsTime, latitude, longitude, heading FROM LastBusInformation", function(err, rows) {
 			for (var i = 0; i < rows.length; i++) {
-				busList.push({id: rows[i].id, latitude: rows[i].latitude, longi: rows[i].longitude});
+				busList.push({id: rows[i].id, latitude: rows[i].latitude, longitude: rows[i].longitude, heading: rows[i].heading});
 			}		
 			
 			res.json({bus_infos: busList});
@@ -38,9 +38,23 @@ router.get('/bus', function(req, res) {
 	});
 });
 
-router.get('/new', function(req, res) {
-	res.json({test: "NEWWW!!!"});
+
+router.get('/macaddress', function(req, res) {
+	
+
+	db.serialize(function() {
+		var macLocationList = [];
+		db.all("Select rowid AS id, macAddress, latitude, longitude, floor FROM LastMacLocation", function(err, rows) {
+			for (var i = 0; i < rows.length; i++) {
+				macLocationList.push({id: rows[i].id, macAddress: rows[i].macAddress, latitude: rows[i].latitude, longitude: rows[i].longitude, floor: rows[i].floor});
+			}		
+			
+			res.json({bus_infos: macLocationList});
+		});
+	});
 });
+
+
 
 //Register Our Routes
 //all of our routes will be prefixed with /api
