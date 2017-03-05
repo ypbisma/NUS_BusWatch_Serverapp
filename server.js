@@ -28,9 +28,9 @@ router.get('/bus', function(req, res) {
 
 	db.serialize(function() {
 		var busList = [];
-		db.all("Select rowid AS id, nodeId, gpsTime, latitude, longitude, heading FROM LastBusInformation", function(err, rows) {
+		db.all("Select rowid AS id, nodeId, vehicleSerial, gpsTime, latitude, longitude, heading FROM LastBusInformation", function(err, rows) {
 			for (var i = 0; i < rows.length; i++) {
-				busList.push({id: rows[i].id, latitude: rows[i].latitude, longitude: rows[i].longitude, heading: rows[i].heading});
+				busList.push({id: rows[i].id, vehicleSerial: rows[i].vehicleSerial, latitude: rows[i].latitude, longitude: rows[i].longitude, heading: rows[i].heading});
 			}		
 			
 			res.json({bus_infos: busList});
